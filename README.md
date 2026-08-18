@@ -9,8 +9,8 @@ HTML / CSS / JS vanilla. Aucune dépendance, aucun build. Le site se déploie te
 ```
 index.html      structure et contenu
 styles.css      design tokens + mise en page
-script.js       nav, palmarès dépliable, comparateur, popup contact
-assets/         visuels optimisés
+script.js       nav, palmarès, comparateur, popup contact, configurateur
+assets/         visuels optimisés + vidéo embarquée
 favicon.svg
 robots.txt
 ```
@@ -41,28 +41,42 @@ Un simple double-clic sur `index.html` fonctionne aussi, mais l'embed Instagram 
 | Embarquez avec moi (Instagram) | `#embarque` |
 | Dans le bateau (vidéo) | `#bateau` |
 | Partenariat | `#partenariat` |
+| Configurateur d'emplacements | `#emplacements` |
 | Contact | `#contact` |
 
 Tous les CTA « Devenir partenaire » / « Me contacter » ouvrent la popup contact (email, téléphone, Instagram). Pas de backend, pas de formulaire.
 
+## Configurateur d'emplacements sponsors
+
+Section `#emplacements` : une entreprise dépose son logo (glisser-déposer sur desktop, bouton sur mobile) sur une vue 2D du bateau et voit immédiatement le rendu.
+
+- **Deux vues** — profil (coque) et dessus (pont), avec deux emplacements chacune.
+- **Zones prédéfinies** — chaque emplacement porte un nom, une dimension et une note de visibilité ; il devient une contrepartie identifiable à négocier.
+- **100 % côté navigateur** — le logo est lu via `URL.createObjectURL()`. Rien n'est téléversé, aucun serveur n'est sollicité. C'est un argument à mettre en avant auprès des marques.
+- **Export PNG en 2×** — bouton « Télécharger le visuel », composition via `<canvas>`, signature automatique en bas de l'image.
+
+Pour modifier les emplacements (position, taille, texte), tout est dans la constante `VIEWS` en haut du module configurateur de `script.js`. Les coordonnées `x`, `y`, `w`, `h` sont en pourcentage de la boîte de l'image du bateau.
+
 ## Vidéo « Dans le bateau »
 
-La section `#bateau` **et son lien de navigation sont masqués tant que la vidéo n'est pas disponible** — aucun placeholder n'est visible côté public. `script.js` révèle la section automatiquement dès que le navigateur parvient à lire `assets/dans-le-bateau.mp4`.
+`assets/dans-le-bateau.mp4` — 1920×1080, 82 s, H.264. La section `#bateau` et son lien de navigation sont révélés par `script.js` **uniquement si le navigateur parvient à lire le fichier** ; en son absence, rien de cassé n'apparaît côté public.
 
-Pour l'activer :
+⚠️ **Le fichier pèse 91 Mo, soit ~9,3 Mbit/s.** C'est du débit GoPro brut, pas du débit web :
 
-1. Encoder la rush source (`vidéo embarqué/GH010894.mov`, 467 Mo) en H.264 / AAC, ~1080p, quelques dizaines de Mo :
+- chaque visiteur qui lance la lecture télécharge 91 Mo ;
+- GitHub avertit au-delà de 50 Mo par fichier et refuse au-delà de 100 Mo — la marge est mince ;
+- l'atome `moov` est en fin de fichier (pas de `faststart`), donc le démarrage de lecture est plus lent qu'il ne devrait.
 
-   ```bash
-   ffmpeg -i "GH010894.mov" -t 90 -vf "scale=1920:-2" \
-     -c:v libx264 -crf 23 -preset slow -pix_fmt yuv420p \
-     -c:a aac -b:a 128k -movflags +faststart \
-     assets/dans-le-bateau.mp4
-   ```
+Pour le ramener à ~15 Mo sans perte visible, avec ffmpeg :
 
-2. GitHub refuse les fichiers > 100 Mo. Deux options :
-   - garder le fichier sous ~50 Mo et retirer la ligne `assets/dans-le-bateau.mp4` du `.gitignore` ;
-   - ou héberger la vidéo ailleurs (YouTube, Vimeo, Cloudflare Stream) et remplacer la balise `<video>` de `index.html` par l'embed correspondant.
+```bash
+ffmpeg -i assets/dans-le-bateau.mp4 \
+  -c:v libx264 -crf 24 -preset slow -pix_fmt yuv420p -vf "scale=1920:-2" \
+  -c:a aac -b:a 128k -movflags +faststart \
+  assets/dans-le-bateau-web.mp4
+```
+
+Alternative : héberger la vidéo sur YouTube ou Vimeo et remplacer la balise `<video>` par l'embed correspondant — bande passante et lecture adaptative gérées pour vous.
 
 ## Design tokens
 
@@ -79,7 +93,9 @@ L'accent est piloté par la variable CSS `--accent` dans `styles.css` — varian
 
 ## Assets
 
-Les visuels de `assets/` sont des versions optimisées pour le web (redimensionnées, JPEG q82 — 18 Mo → 1,8 Mo). Les originaux pleine résolution restent dans `photo sponso/` et `Desingclaudedesing/`, exclus du dépôt via `.gitignore`.
+Les photos de `assets/` sont des versions optimisées pour le web (redimensionnées, JPEG q82 — 18 Mo → 1,8 Mo). Les originaux pleine résolution restent dans `photo sponso/` et `Desingclaudedesing/`, exclus du dépôt via `.gitignore`.
+
+`bateau-profil.png` et `bateau-pont.png` sont les deux vues du kayak détourées sur fond transparent, utilisées par le configurateur.
 
 La spécification de design complète est conservée dans [docs/design-handoff.md](docs/design-handoff.md).
 

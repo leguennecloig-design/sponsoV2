@@ -241,6 +241,41 @@
     </div>
   </section>
 
+
+  <!-- ============ Configurateur d'emplacements ============ -->
+  <section class="section section--stack config" id="emplacements" aria-labelledby="config-title">
+    <p class="eyebrow eyebrow--rule eyebrow--accent">Votre logo sur mon bateau</p>
+    <div class="split">
+      <h2 class="h2" id="config-title">Choisissez votre emplacement.</h2>
+      <p class="lead muted">Déposez votre logo sur la coque pour voir ce que donnerait votre marque en course. Rien n'est envoyé&nbsp;: votre fichier reste dans votre navigateur.</p>
+    </div>
+
+    <div class="config__tabs" role="tablist" aria-label="Vue du bateau">
+      <button class="config__tab is-active" type="button" role="tab" aria-selected="true" data-view="profil">Vue de profil</button>
+      <button class="config__tab" type="button" role="tab" aria-selected="false" data-view="pont">Vue de dessus</button>
+    </div>
+
+    <div class="config__stage" id="configStage">
+      <img class="config__boat" id="configBoat" src="assets/bateau-profil.png" width="1413" height="172"
+           loading="lazy" decoding="async" alt="Kayak de descente Wakatwo, vue de profil">
+      <div class="config__zones" id="configZones"></div>
+      <p class="config__drop" id="configDrop" aria-hidden="true">Relâchez pour placer votre logo</p>
+    </div>
+
+    <p class="config__hint">Glissez un PNG à fond transparent sur un emplacement, ou utilisez les boutons ci-dessous.</p>
+
+    <div class="config__cards" id="configCards"></div>
+
+    <div class="config__actions">
+      <button class="btn btn--outline" id="configReset" type="button" hidden>Tout effacer</button>
+      <button class="btn btn--light" id="configExport" type="button" hidden>Télécharger le visuel →</button>
+      <a class="btn btn--accent" href="#contact" data-contact-modal>Discuter de ces emplacements →</a>
+    </div>
+
+    <p class="config__legal">Visuel d'illustration à but de simulation. Les emplacements définitifs et leurs dimensions sont convenus ensemble, dans la limite du règlement de la Fédération.</p>
+
+    <input type="file" id="configFile" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden>
+  </section>
 </main>
 
 <!-- ============ Contact / footer ============ -->

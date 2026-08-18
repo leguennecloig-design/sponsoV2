@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #0f0f1c; }
+    a { color: #000d10; text-decoration: none; }
+    a:hover { color: #bc7155; }
+    ::selection { background: #bc7155; color: #ffffff; }
+    #qui-suis-je, #palmares, #objectif, #embarque, #bateau, #partenariat, #contact { scroll-margin-top: 90px; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Helvetica Neue', Arial, sans-serif; background:#0f0f1c; color:#ffffff; overflow-x:hidden;">
+
+  <!-- Fixed header: announcement bar + nav -->
+  <div style="position:fixed; top:0; left:0; right:0; z-index:50;">
+    <div style="background:#000d10; color:#ffffff; text-align:center; padding:11px 16px; font-size:13px; letter-spacing:0.06em; font-weight:400;">
+      OBJECTIF 2027 — GRAZ, AUTRICHE — DOUBLE TITRE MONDIAL U18
+    </div>
+    <nav style="{{ navStyle }}">
+      <a href="#top" style="font-size:18px; font-weight:700; letter-spacing:-0.02em; color:{{ navTextColor }};">LOÏG LE GUENNEC</a>
+      <div style="display:flex; gap:22px; flex-wrap:wrap; align-items:center;">
+        <a href="#palmares" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Palmarès</a>
+        <a href="#objectif" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Objectif</a>
+        <a href="#qui-suis-je" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Parcours</a>
+        <a href="#embarque" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Suivre</a>
+        <a href="#bateau" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Vidéo</a>
+        <a href="#partenariat" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Partenariat</a>
+        <a href="#contact" style="font-size:15px; color:{{ navTextColor }}; opacity:0.85;">Contact</a>
+      </div>
+      <a href="#partenariat" onclick="{{ openContactModal }}" style="background:{{ navCtaBg }}; color:{{ navCtaColor }}; padding:11px 22px; border-radius:1000px; font-size:14px; font-weight:700; white-space:nowrap;">Devenir partenaire →</a>
+    </nav>
+  </div>
+
+  <!-- Hero -->
+  <section id="top" style="position:relative; min-height:100vh; display:flex; align-items:flex-end; justify-content:flex-end; background-image: linear-gradient(90deg, rgba(0,13,16,0.85) 0%, rgba(0,13,16,0.5) 42%, rgba(0,13,16,0.05) 62%), linear-gradient(0deg, rgba(0,13,16,0.6) 0%, rgba(0,13,16,0) 45%), url('assets/hero-action2.jpg'); background-size:cover; background-position:22% 42%;">
+    <div style="max-width:1200px; margin:0 auto; width:100%; padding:0 40px 90px 40px; box-sizing:border-box; display:flex; justify-content:flex-end;">
+      <div style="text-align:right; max-width:640px;">
+        <div style="font-size:14px; letter-spacing:0.12em; color:rgba(255,255,255,0.85); font-weight:700; margin-bottom:22px; text-shadow:0 2px 14px rgba(0,0,0,0.5);">CANOË-KAYAK · DESCENTE · ÉQUIPE DE FRANCE</div>
+        <h1 style="font-size:clamp(40px,7.5vw,110px); line-height:0.88; font-weight:700; letter-spacing:-0.03em; color:#fdfbf8; margin:0 0 28px 0; text-shadow:0 4px 24px rgba(0,0,0,0.45);">LOÏG LE<br>GUENNEC</h1>
+        <p style="font-size:clamp(18px,2.1vw,26px); line-height:1.4; color:#f2efe9; margin:0 0 40px 0; font-weight:400; margin-left:auto; text-shadow:0 2px 16px rgba(0,0,0,0.5);">{{ heroSubtitle }}</p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:flex-end;">
+          <a href="#qui-suis-je" style="background:#ffffff; color:#000d10; padding:16px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Découvrir mon parcours →</a>
+          <a href="#partenariat" onclick="{{ openContactModal }}" style="background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.7); padding:15px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Devenir partenaire →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Palmarès -->
+  <section id="palmares" style="max-width:1200px; margin:0 auto; padding:0 40px 130px 40px; display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:70px; align-items:start;">
+    <div style="position:sticky; top:110px;">
+      <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:18px; margin-bottom:24px; font-size:14px; letter-spacing:0.08em; color:{{ accentColor }}; font-weight:700;">PALMARÈS</div>
+      <h2 style="font-size:clamp(32px,4vw,52px); line-height:1.05; font-weight:700; letter-spacing:-0.02em; margin:0 0 20px 0;">Une progression continue.</h2>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.6); margin:0 0 30px 0;">Portée par le travail acharné et un entourage engagé.</p>
+      <div style="font-size:15px; letter-spacing:0.04em; color:{{ accentColor }}; font-weight:700; margin-bottom:14px;">VICE-CHAMPION D'EUROPE EN SPRINT KAYAK</div>
+      <div style="aspect-ratio:4/5; overflow:hidden; background:#151623;">
+        <img src="assets/palmares-podium2.jpg" alt="Loïg Le Guennec sur le podium des Championnats d'Europe" style="width:100%; height:100%; object-fit:cover; object-position:center 14%; display:block;">
+      </div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.6); font-style:italic; margin-top:12px;">Ici, c'est le podium des Championnats d'Europe.</div>
+    </div>
+    <div>
+      <div style="margin-bottom:50px;">
+        <h3 style="font-size:23px; font-weight:700; margin:0 0 4px 0;">2026</h3>
+        <div style="height:1px; background:rgba(255,255,255,0.15); margin-bottom:8px;"></div>
+        <sc-for list="{{ results2026 }}" as="item" hint-placeholder-count="6">
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.15);">
+            <span style="flex:none; min-width:52px; text-align:center; font-size:11px; letter-spacing:0.06em; font-weight:700; color:{{ accentColor }}; border:1px solid {{ accentColor }}; border-radius:1000px; padding:5px 10px;">{{ item.rank }}</span>
+            <span style="font-size:18px; color:#ffffff;">{{ item.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-bottom:50px;">
+        <h3 style="font-size:23px; font-weight:700; margin:0 0 4px 0;">2025</h3>
+        <div style="height:1px; background:rgba(255,255,255,0.15); margin-bottom:8px;"></div>
+        <sc-for list="{{ results2025 }}" as="item" hint-placeholder-count="3">
+          <div style="display:flex; align-items:baseline; gap:14px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.15);">
+            <span style="font-size:18px; color:rgba(255,255,255,0.6);">{{ item.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ showFullPalmares }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-bottom:50px;">
+          <h3 style="font-size:23px; font-weight:700; margin:0 0 4px 0;">2024</h3>
+          <div style="height:1px; background:rgba(255,255,255,0.15); margin-bottom:8px;"></div>
+          <sc-for list="{{ results2024 }}" as="item" hint-placeholder-count="2">
+            <div style="display:flex; align-items:baseline; gap:14px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.15);">
+              <span style="font-size:18px; color:rgba(255,255,255,0.6);">{{ item.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div>
+          <h3 style="font-size:23px; font-weight:700; margin:0 0 4px 0;">2023</h3>
+          <div style="height:1px; background:rgba(255,255,255,0.15); margin-bottom:8px;"></div>
+          <sc-for list="{{ results2023 }}" as="item" hint-placeholder-count="3">
+            <div style="display:flex; align-items:baseline; gap:14px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.15);">
+              <span style="font-size:18px; color:rgba(255,255,255,0.6);">{{ item.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <button onclick="{{ togglePalmares }}" style="margin-top:30px; background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.4); padding:14px 24px; border-radius:1000px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;">{{ palmaresButtonLabel }}</button>
+    </div>
+  </section>
+
+  <!-- Objectif -->
+  <section id="objectif" style="background:{{ accentColor }}; color:#ffffff;">
+    <div style="max-width:1200px; margin:0 auto; padding:100px 40px; display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:60px; align-items:center;">
+      <div>
+        <div style="font-size:14px; letter-spacing:0.08em; color:rgba(255,255,255,0.75); font-weight:700; margin-bottom:20px;">L'OBJECTIF</div>
+        <h2 style="font-size:clamp(36px,5vw,63px); line-height:1; font-weight:700; letter-spacing:-0.02em; margin:0 0 26px 0;">Graz, Autriche.<br>Été 2027.</h2>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.92); max-width:520px; margin:0 0 20px 0;">Après une première saison internationale couronnée de médailles, l'objectif est clair : devenir double champion du monde des Championnats du Monde U18. Individuel et par équipe.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.92); max-width:520px; margin:0 0 20px 0;">Cet objectif peut se réaliser avec votre aide — une aide précieuse, sans laquelle cette trajectoire n'irait pas aussi loin.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.92); max-width:520px; margin:0 0 36px 0;">Graz 2027 n'est qu'une étape. L'ambition va plus loin : devenir champion du monde chez les seniors, en classique comme en sprint.</p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="#partenariat" onclick="{{ openContactModal }}" style="background:#ffffff; color:#000d10; padding:16px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Devenir partenaire →</a>
+          <a href="#contact" onclick="{{ openContactModal }}" style="background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.7); padding:15px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Me contacter →</a>
+        </div>
+      </div>
+      <div style="aspect-ratio:4/5; overflow:hidden;">
+        <img src="assets/objectif-portrait.jpg" alt="Loig Le Guennec, Championnats d'Europe" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Qui suis-je -->
+  <section id="qui-suis-je" style="max-width:1200px; margin:0 auto; padding:130px 40px; display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:70px; align-items:center;">
+    <div style="position:relative; aspect-ratio:4/5; overflow:hidden; background:#151623; user-select:none;">
+      <img src="assets/qui-suis-je2.jpg" alt="Loïg Le Guennec en canoë biplace, en course" style="width:100%; height:100%; object-fit:cover; display:block;">
+      <div style="position:absolute; inset:0; overflow:hidden; clip-path: inset(0 {{ afterClip }}% 0 0);">
+        <img src="assets/qui-suis-je-enfant.jpg" alt="Loïg Le Guennec enfant, débuts en kayak" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div style="position:absolute; top:16px; left:16px; background:rgba(0,13,16,0.6); color:#fff; font-size:12px; letter-spacing:0.06em; font-weight:700; padding:6px 12px; border-radius:1000px;">AVANT</div>
+      <div style="position:absolute; top:16px; right:16px; background:rgba(0,13,16,0.6); color:#fff; font-size:12px; letter-spacing:0.06em; font-weight:700; padding:6px 12px; border-radius:1000px;">APRÈS</div>
+      <div style="position:absolute; top:0; bottom:0; left:{{ sliderPos }}%; width:0;">
+        <div style="position:absolute; top:0; bottom:0; left:0; width:2px; background:#fff; box-shadow:0 0 8px rgba(0,0,0,0.4);"></div>
+        <div style="position:absolute; top:50%; left:0; transform:translate(-50%,-50%); width:40px; height:40px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; color:#000d10; box-shadow:0 2px 10px rgba(0,0,0,0.3);">↔</div>
+      </div>
+      <input type="range" min="0" max="100" value="{{ sliderPos }}" onInput="{{ onSliderChange }}" style="position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:ew-resize;">
+    </div>
+    <div>
+      <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:18px; margin-bottom:24px; font-size:14px; letter-spacing:0.08em; color:{{ accentColor }}; font-weight:700;">QUI SUIS-JE</div>
+      <h2 style="font-size:clamp(32px,4vw,52px); line-height:1.05; font-weight:700; letter-spacing:-0.02em; margin:0 0 28px 0;">Seize ans, six ans d'eau vive, une équipe de France.</h2>
+      <p style="font-size:18px; line-height:1.61; color:#ffffff; margin:0 0 20px 0;">Je m'appelle Loïg Le Guennec, j'ai 16 ans, et je suis pagayeur en canoë-kayak, discipline descente de rivière, au sein du Torcy Canoë Kayak.</p>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.6); margin:0 0 20px 0;">Je suis monté sur l'eau pour la première fois à l'âge de 10 ans. Au début, c'était juste pour m'amuser sur l'eau, puis peu à peu tout a évolué et c'est devenu plus sérieux. Aujourd'hui, je porte les couleurs de l'Équipe de France et je viens de décrocher mes premières médailles internationales aux Championnats d'Europe en Écosse.</p>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.6); margin:0 0 20px 0;">Je vis pour mes objectifs sportifs. Mais j'ai aussi des objectifs scolaires clairs, et ça compte tout autant pour moi — l'un ne va pas sans l'autre.</p>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.6); margin:0 0 20px 0;">Ce n'est que le début de l'aventure. Je compte bien aller beaucoup plus loin.</p>
+      <p style="font-size:18px; line-height:1.61; color:#ffffff; margin:0 0 36px 0; font-weight:700;">Mon objectif : devenir double champion du monde U18 à Graz, en Autriche, en 2027.</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:0;">
+        <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:18px;">
+          <div style="font-size:30px; font-weight:700;">16 ans</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">Torcy Canoë Kayak</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:18px;">
+          <div style="font-size:30px; font-weight:700;">6 ans</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">de pratique</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:18px;">
+          <div style="font-size:30px; font-weight:700;">9 / sem.</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">entraînements</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Embarquez avec moi -->
+  <section id="embarque" style="max-width:1200px; margin:0 auto; padding:60px 40px 130px 40px;">
+    <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:18px; margin-bottom:24px; font-size:14px; letter-spacing:0.08em; color:{{ accentColor }}; font-weight:700;">EMBARQUEZ AVEC MOI</div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:70px; align-items:end; margin-bottom:50px;">
+      <h2 style="font-size:clamp(32px,4vw,52px); line-height:1.05; font-weight:700; letter-spacing:-0.02em; margin:0;">Une semaine de compétition, vue de l'intérieur.</h2>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.6); margin:0;">Entraînements, déplacements, coulisses et courses : suivez le déroulé d'une semaine de compétition en direct sur mon compte Instagram.</p>
+    </div>
+    <div style="max-width:540px; margin:0 auto; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.15);">
+      <iframe src="https://www.instagram.com/p/Das0fJRMYJb/embed" width="100%" height="760" frameborder="0" scrolling="no" allowtransparency="true" style="display:block; width:100%; border:none;" title="Publication Instagram de Loïg Le Guennec"></iframe>
+    </div>
+    <div style="text-align:center; margin-top:28px;">
+      <a href="https://instagram.com/loig.lgc" target="_blank" rel="noopener" style="display:inline-block; background:{{ accentColor }}; color:#ffffff; padding:15px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Suivre @loig.lgc →</a>
+    </div>
+  </section>
+
+  <!-- Dans le bateau -->
+  <section id="bateau" style="background:#0f0f1c; color:#ffffff;">
+    <div style="max-width:1200px; margin:0 auto; padding:130px 40px;">
+      <div style="font-size:14px; letter-spacing:0.08em; color:rgba(255,255,255,0.6); font-weight:700; margin-bottom:24px;">DANS LE BATEAU</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:70px; align-items:end; margin-bottom:50px;">
+        <h2 style="font-size:clamp(32px,4vw,52px); line-height:1.05; font-weight:700; letter-spacing:-0.02em; margin:0;">Embarquez avec moi, dans le bateau.</h2>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.75); margin:0;">Une caméra embarquée pour vivre la course depuis le kayak, au plus près de la rivière.</p>
+      </div>
+      <div style="aspect-ratio:16/9; background:#1a1b2b; border-radius:16px; overflow:hidden;">
+        <video src="assets/dans-le-bateau.mp4" controls playsinline style="width:100%; height:100%; object-fit:cover; display:block; background:#1a1b2b;"></video>
+      </div>
+      <!-- DEV: vidéo attendue à assets/dans-le-bateau.mp4 -->
+    </div>
+  </section>
+
+  <!-- Partenariat -->
+  <section id="partenariat" style="background:#0f0f1c; color:#ffffff;">
+    <div style="max-width:1200px; margin:0 auto; padding:130px 40px; display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:70px; align-items:center;">
+      <div style="aspect-ratio:4/5; overflow:hidden;">
+        <img src="assets/partenaire-edf2.jpg" alt="Loïg Le Guennec en compétition, sponsor visible sur le bateau" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div>
+        <div style="font-size:14px; letter-spacing:0.08em; color:rgba(255,255,255,0.6); font-weight:700; margin-bottom:20px;">DEVENIR PARTENAIRE</div>
+        <h2 style="font-size:clamp(30px,3.6vw,44px); line-height:1.08; font-weight:700; letter-spacing:-0.02em; margin:0 0 26px 0;">Pourquoi devenir partenaire</h2>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 20px 0;">La performance ne se construit pas seul. Elle se construit avec un entourage — coach, famille, préparation physique et médicale — et avec les moyens de se déplacer, de s'entraîner, de progresser sans compter.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 20px 0;">Rejoindre mon projet, c'est faire partie de cet entourage. C'est associer votre marque à une trajectoire sportive ambitieuse, portée par des valeurs d'eau, de nature et de dépassement de soi — et suivre de près une progression vers l'objectif 2027.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 20px 0;">Aujourd'hui, tout cela est possible financièrement grâce à mes parents, qui financent ma saison. Sans eux, la performance serait impossible.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 20px 0;">Chaque euro compte et peut m'aider à aller encore plus loin — à me rapprocher un peu plus de mon rêve.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 20px 0;">De nombreuses personnes me soutiennent aussi dans mon projet sportif : mon entraîneur, qui est derrière chacune de mes performances, une diététicienne, un ostéopathe, un médecin du sport, et mon club.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 36px 0;">Des moyens supplémentaires m'aideraient grandement dans mon projet et pourraient vraiment m'aider à atteindre mes objectifs : toute l'année, je dois changer et améliorer mon matériel, qui est coûteux, et mes déplacements pour préparer les compétitions le sont tout autant.</p>
+        <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.85); margin:0 0 36px 0;">En échange de votre soutien : visibilité sur mon bateau de compétition, présence sur mes réseaux et mes lives de compétition, et une relation directe et personnalisée avec vous.</p>
+        <a href="#contact" onclick="{{ openContactModal }}" style="display:inline-block; background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.7); padding:15px 26px; border-radius:1000px; font-size:16px; font-weight:700;">Discutons de notre partenariat →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / footer -->
+  <footer id="contact" style="background:#000d10; color:#ffffff;">
+    <div style="max-width:1200px; margin:0 auto; padding:130px 40px 60px 40px;">
+      <div style="font-size:14px; letter-spacing:0.08em; color:rgba(255,255,255,0.6); font-weight:700; margin-bottom:24px;">ME CONTACTER</div>
+      <h2 style="font-size:clamp(34px,5vw,68px); line-height:1.02; font-weight:700; letter-spacing:-0.02em; margin:0 0 24px 0; max-width:800px;">Un projet, une question, une envie de partenariat ?</h2>
+      <p style="font-size:18px; line-height:1.61; color:rgba(255,255,255,0.75); margin:0 0 56px 0;">Je réponds directement.</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:0; border-top:1px solid rgba(255,255,255,0.2); margin-bottom:80px;">
+        <a href="mailto:leguennec.loig@gmail.com" style="display:block; padding:26px 0; border-bottom:1px solid rgba(255,255,255,0.2); color:#ffffff; font-size:20px;">Email<br><span style="font-size:15px; color:rgba(255,255,255,0.6);">leguennec.loig@gmail.com</span></a>
+        <a href="tel:+33663633369" style="display:block; padding:26px 0; border-bottom:1px solid rgba(255,255,255,0.2); color:#ffffff; font-size:20px;">Téléphone<br><span style="font-size:15px; color:rgba(255,255,255,0.6);">06 63 63 33 69</span></a>
+        <a href="https://instagram.com/loig.lgc" target="_blank" rel="noopener" style="display:block; padding:26px 0; border-bottom:1px solid rgba(255,255,255,0.2); color:#ffffff; font-size:20px;">Instagram<br><span style="font-size:15px; color:rgba(255,255,255,0.6);">@loig.lgc</span></a>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.15);">
+        <div style="font-size:15px; color:rgba(255,255,255,0.5);">© 2026 Loïg Le Guennec — Torcy Canoë Kayak</div>
+        <div style="font-size:15px; color:rgba(255,255,255,0.5);">Direction Graz 2027</div>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ showContactModal }}" hint-placeholder-val="{{ false }}">
+    <div onclick="{{ closeContactModal }}" style="position:fixed; inset:0; background:rgba(0,13,16,0.75); z-index:100; display:flex; align-items:center; justify-content:center; padding:24px;">
+      <div onclick="{{ stopPropagation }}" style="background:#ffffff; color:#000d10; border-radius:20px; max-width:460px; width:100%; padding:44px 40px; position:relative;">
+        <button onclick="{{ closeContactModal }}" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:22px; line-height:1; cursor:pointer; color:#8e8e95; font-family:inherit;">×</button>
+        <div style="font-size:14px; letter-spacing:0.08em; color:#8e8e95; font-weight:700; margin-bottom:14px;">ME CONTACTER</div>
+        <h3 style="font-size:28px; font-weight:700; letter-spacing:-0.02em; margin:0 0 26px 0;">Discutons de notre partenariat.</h3>
+        <div style="display:flex; flex-direction:column; gap:0; border-top:1px solid #d5d3d4;">
+          <a href="mailto:leguennec.loig@gmail.com" style="display:block; padding:18px 0; border-bottom:1px solid #d5d3d4; color:#000d10; font-size:17px;">Email<br><span style="font-size:14px; color:#8e8e95;">leguennec.loig@gmail.com</span></a>
+          <a href="tel:+33663633369" style="display:block; padding:18px 0; border-bottom:1px solid #d5d3d4; color:#000d10; font-size:17px;">Téléphone<br><span style="font-size:14px; color:#8e8e95;">06 63 63 33 69</span></a>
+          <a href="https://instagram.com/loig.lgc" target="_blank" rel="noopener" style="display:block; padding:18px 0; color:#000d10; font-size:17px;">Instagram<br><span style="font-size:14px; color:#8e8e95;">@loig.lgc</span></a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1440}, &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#bc7155&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#bc7155&quot;, &quot;#a85f42&quot;, &quot;#c17b52&quot;, &quot;#8e5a3f&quot;], &quot;section&quot;: &quot;Style&quot;}, &quot;heroTagline&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Long&quot;, &quot;options&quot;: [&quot;Long&quot;, &quot;Court&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Contenu&quot;}}">
+class Component extends DCLogic {
+  state = { navSolid: false, showFullPalmares: false, sliderPos: 50, showContactModal: false };
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const solid = window.scrollY > 90;
+      if (solid !== this.state.navSolid) this.setState({ navSolid: solid });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+  }
+
+  renderVals() {
+    const solid = this.state.navSolid;
+    const accentColor = this.props.accentColor ?? '#bc7155';
+    const heroTagline = this.props.heroTagline ?? 'Long';
+
+    const heroSubtitle = heroTagline === 'Court'
+      ? "De Torcy à l'Europe. Prochain arrêt : le monde."
+      : "Champion d'Europe par équipe. Vice-champion d'Europe. Direction Graz 2027.";
+
+    return {
+      accentColor,
+      heroSubtitle,
+      navStyle: `display:flex; align-items:center; justify-content:space-between; gap:24px; padding:${solid ? '16px 40px' : '22px 40px'}; background:${solid ? 'rgba(15,15,28,0.92)' : 'transparent'}; backdrop-filter:${solid ? 'blur(10px)' : 'none'}; box-shadow:${solid ? '0 1px 0 rgba(255,255,255,0.12)' : 'none'}; transition:all 0.25s ease;`,
+      navTextColor: '#ffffff',
+      navCtaBg: accentColor,
+      navCtaColor: '#ffffff',
+      results2026: [
+        { rank: '2E', label: "Vice-champion d'Europe en individuel — Kayak" },
+        { rank: '1ER', label: "Champion d'Europe par équipe — Écosse" },
+        { rank: '4E', label: "4ème aux Championnats d'Europe en Canoë biplace" },
+        { rank: '1ER', label: '2 titres de Champion de France' },
+        { rank: 'ÉDF', label: 'Sélection en Équipe de France' },
+        { rank: '2E', label: '4 médailles d\u2019argent aux Championnats de France' },
+        { rank: '3E', label: '1 médaille de bronze aux Championnats de France' },
+        { rank: '★', label: 'De nombreuses médailles aux Championnats de France par équipe' },
+      ],
+      results2025: [
+        { label: "Aux portes de l'Équipe de France" },
+        { label: '2 top 5 aux Championnats de France sprint' },
+        { label: 'Médailles aux Championnats de France par équipe' },
+      ],
+      results2024: [
+        { label: 'Champion de France U15 en Kayak individuel' },
+        { label: 'Vainqueur de la Coupe de France' },
+      ],
+      results2023: [
+        { label: '5ème aux Championnats de France en Kayak U15' },
+        { label: 'Champion de France en Canoë biplace' },
+        { label: 'Vainqueur de la Coupe de France' },
+      ],
+      sliderPos: this.state.sliderPos,
+      afterClip: 100 - this.state.sliderPos,
+      onSliderChange: (e) => this.setState({ sliderPos: Number(e.target.value) }),
+      showContactModal: this.state.showContactModal,
+      openContactModal: (e) => { e.preventDefault(); this.setState({ showContactModal: true }); },
+      closeContactModal: () => this.setState({ showContactModal: false }),
+      stopPropagation: (e) => e.stopPropagation(),
+      showFullPalmares: this.state.showFullPalmares,
+      palmaresButtonLabel: this.state.showFullPalmares ? 'Réduire le palmarès' : 'Voir tout le palmarès',
+      togglePalmares: () => this.setState(s => ({ showFullPalmares: !s.showFullPalmares })),
+    };
+  }
+}
+</script>
+</body>
+</html>

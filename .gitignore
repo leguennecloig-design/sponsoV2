@@ -1,0 +1,16 @@
+# Médias sources (hors production) — trop volumineux pour Git
+photo sponso/
+vidéo embarqué/
+Desingclaudedesing/
+
+# Vidéo embarquée : à héberger ailleurs (voir README)
+assets/dans-le-bateau.mp4
+
+# OS / éditeurs
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+.vscode/
+.idea/

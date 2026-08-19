@@ -745,58 +745,128 @@ body.is-locked { overflow: hidden; }
   padding: 24px;
 }
 .modal[hidden] { display: none; }
-.modal__overlay { position: absolute; inset: 0; background: rgba(0, 13, 16, 0.75); }
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 13, 16, 0.78);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
 
 .modal__card {
   position: relative;
   background: var(--modal-bg);
   color: var(--modal-text);
-  border-radius: 20px;
-  max-width: 460px;
+  border-radius: 22px;
+  max-width: 520px;
   width: 100%;
-  padding: 44px 40px;
+  padding: 44px 40px 38px;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
 }
+
 .modal__close {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 22px;
-  line-height: 1;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--modal-rule);
+  border-radius: 50%;
   cursor: pointer;
   color: var(--modal-muted);
   font-family: inherit;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
-.modal__close:hover { color: var(--modal-text); }
+.modal__close svg { width: 17px; height: 17px; display: block; }
+.modal__close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(188, 113, 85, 0.08);
+}
 
 .modal__eyebrow {
-  font-size: 14px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--modal-muted);
+  color: var(--accent);
   font-weight: 700;
   margin: 0 0 14px;
 }
+
 .modal__title {
-  font-size: 28px;
+  font-size: 30px;
+  line-height: 1.12;
   font-weight: 700;
   letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  max-width: 380px;
+}
+
+.modal__lead {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #5c5c66;
   margin: 0 0 26px;
 }
-.modal__links { display: flex; flex-direction: column; border-top: 1px solid var(--modal-rule); }
-.modal__links a {
-  display: block;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--modal-rule);
-  font-size: 17px;
-  transition: color 0.2s ease;
+
+.modal__links { display: flex; flex-direction: column; gap: 10px; }
+
+.modal__sign {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--modal-muted);
+  margin: 24px 0 0;
 }
-.modal__links a:last-child { border-bottom: none; }
-.modal__links a span { display: block; font-size: 14px; color: var(--modal-muted); }
-.modal__links a:hover { color: var(--accent); }
+.modal__sign-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #35b36a;
+  box-shadow: 0 0 0 4px rgba(53, 179, 106, 0.15);
+}
+
+/* Variante claire des cartes de contact, pour la popup */
+.fcard--light {
+  border-color: var(--modal-rule);
+  background: #fbfafa;
+  color: var(--modal-text);
+  padding: 16px 18px;
+  gap: 15px;
+  border-radius: 12px;
+}
+.fcard--light:hover {
+  border-color: var(--accent);
+  background: rgba(188, 113, 85, 0.07);
+  color: var(--modal-text);
+}
+.fcard--light .fcard__icon { border-color: var(--modal-rule); color: var(--accent); width: 40px; height: 40px; }
+.fcard--light:hover .fcard__icon {
+  border-color: rgba(188, 113, 85, 0.55);
+  background: rgba(188, 113, 85, 0.12);
+}
+.fcard--light .fcard__label { color: var(--modal-muted); }
+.fcard--light .fcard__value { font-size: 16px; }
+.fcard--light .fcard__arrow { color: var(--modal-muted); }
+.fcard--light:hover .fcard__arrow { color: var(--accent); }
+
+@media (max-width: 520px) {
+  .modal { padding: 16px; }
+  .modal__card { padding: 36px 22px 30px; border-radius: 18px; }
+  .modal__title { font-size: 25px; }
+  .modal__lead { font-size: 15px; margin-bottom: 22px; }
+  .fcard--light { padding: 14px 14px; gap: 12px; }
+  .fcard--light .fcard__value { font-size: 15px; }
+}
 
 /* ---------------------------------------------------------
    Responsive

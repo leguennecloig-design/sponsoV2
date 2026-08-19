@@ -1030,3 +1030,38 @@ body.is-locked { overflow: hidden; }
   .config__actions .btn { width: 100%; text-align: center; }
   .config__count { width: 100%; }
 }
+
+/* ---------------------------------------------------------
+   Engagement nature — clôture des contreparties
+   --------------------------------------------------------- */
+
+.nature {
+  margin-top: 28px;
+  padding: 30px 32px;
+  border: 1px solid rgba(188, 113, 85, 0.45);
+  border-left-width: 3px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(188, 113, 85, 0.12) 0%, rgba(188, 113, 85, 0) 70%);
+}
+
+.nature__label {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.nature__text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--soft);
+  margin: 0;
+  max-width: 780px;
+}
+
+@media (max-width: 760px) {
+  .nature { padding: 24px 20px; }
+  .nature__text { font-size: 17px; }
+}

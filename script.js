@@ -169,7 +169,8 @@
   var exportBtn= document.getElementById('configExport');
   var countEl  = document.getElementById('configCount');
 
-  // Coordonnées relevées sur les deux rendus, en % de la boîte de l'image.
+  // Emplacements relevés sur le schéma annoté par Loïg, convertis en % de la
+  // boîte de l'image via les marquages orange du bateau comme points de repère.
   var VIEWS = [
     {
       id: 'profil',
@@ -180,19 +181,24 @@
       alt: 'Mon kayak de descente vu de profil',
       zones: [
         {
-          id: 'flanc-avant', name: 'Flanc avant', size: '40 × 10 cm',
-          note: "Le plus grand, et celui qu'on voit le mieux. C'est là que tombent les photos de course, des deux côtés du bateau.",
-          x: 16, y: 56, w: 26, h: 24
+          id: 'proue', name: 'Proue', size: '36 × 10 cm',
+          note: "Tout à l'avant, bien au-dessus de l'eau. C'est la première chose qui passe la ligne d'arrivée.",
+          x: 10.4, y: 22.7, w: 8.1, h: 24.1
         },
         {
-          id: 'flanc-arriere', name: 'Flanc arrière', size: '26 × 10 cm',
-          note: "Bien au-dessus de la ligne d'eau, donc net même quand ça bouge beaucoup.",
-          x: 63, y: 52, w: 17, h: 24
+          id: 'flanc-avant', name: 'Flanc avant', size: '42 × 10 cm',
+          note: "Sur la partie haute de la coque, là où elle reste sèche. Net sur les photos prises depuis la berge.",
+          x: 21.1, y: 25.8, w: 9.5, h: 26.4
         },
         {
-          id: 'proue', name: 'Proue', size: '15 × 8 cm',
-          note: "Petit, mais c'est la première chose qui passe la ligne d'arrivée.",
-          x: 3, y: 58, w: 10, h: 20
+          id: 'flanc-central', name: 'Flanc central', size: '38 × 9 cm',
+          note: "Juste devant moi quand je pagaie. On le voit sur presque toutes les photos de course.",
+          x: 32.5, y: 27.4, w: 8.6, h: 21.8
+        },
+        {
+          id: 'flanc-arriere', name: 'Flanc arrière', size: '75 × 8 cm',
+          note: "Le plus grand des emplacements. Une vraie bande sur toute la longueur arrière, des deux côtés du bateau.",
+          x: 63.5, y: 51.5, w: 16.8, h: 20.2
         }
       ]
     },
@@ -205,19 +211,39 @@
       alt: 'Mon kayak de descente vu de dessus',
       zones: [
         {
-          id: 'pont-avant', name: 'Pont avant', size: '30 × 12 cm',
-          note: "Droit devant moi pendant toute la course. C'est l'emplacement qu'on voit en continu sur mes vidéos embarquées.",
-          x: 16, y: 33, w: 16, h: 32
+          id: 'pont-avant', name: 'Pont avant', size: '74 × 20 cm',
+          note: "Droit devant moi pendant toute la course. C'est ce qu'on voit en continu sur mes vidéos embarquées.",
+          x: 14.4, y: 34.0, w: 16.4, h: 34.2
         },
         {
-          id: 'pont-milieu', name: 'Pont central', size: '20 × 14 cm',
-          note: "Juste devant le cockpit, dans le champ dès que je filme ou qu'on me photographie de face.",
-          x: 34, y: 30, w: 9, h: 38
+          id: 'pont-central', name: 'Pont central', size: '40 × 23 cm',
+          note: "Juste devant le cockpit, dans le champ dès qu'on me photographie de face.",
+          x: 32.6, y: 30.1, w: 8.9, h: 38.2
         },
         {
-          id: 'pont-arriere', name: 'Pont arrière', size: '26 × 14 cm',
-          note: "La partie la plus large du bateau. C'est elle qu'on voit du dessus, depuis les passerelles et les ponts.",
-          x: 67, y: 32, w: 12, h: 36
+          id: 'pont-arriere', name: 'Pont arrière', size: '46 × 22 cm',
+          note: "Sur la partie la plus large du bateau. C'est elle qu'on voit du dessus, depuis les passerelles et les ponts.",
+          x: 66.5, y: 30.7, w: 10.4, h: 37.5
+        },
+        {
+          id: 'bord-gauche', name: 'Bord gauche', size: '17 × 10 cm',
+          note: "Petit format, sur le liseré du pont. Bien visible quand je passe une porte serrée.",
+          x: 68.3, y: 9.0, w: 3.7, h: 15.0
+        },
+        {
+          id: 'bord-droit', name: 'Bord droit', size: '20 × 10 cm',
+          note: "Le même, de l'autre côté. Les deux se prennent souvent ensemble.",
+          x: 68.1, y: 74.0, w: 4.5, h: 17.0
+        },
+        {
+          id: 'poupe', name: 'Poupe', size: '20 × 20 cm',
+          note: "Derrière moi, sur la partie qui se relève. Format presque carré, pratique pour un logo rond.",
+          x: 78.9, y: 32.0, w: 4.4, h: 34.0
+        },
+        {
+          id: 'pointe-poupe', name: 'Pointe arrière', size: '20 × 18 cm',
+          note: "Le dernier bout du bateau. Petit, mais c'est ce que voient ceux qui me suivent en course.",
+          x: 84.8, y: 35.0, w: 4.6, h: 30.0
         }
       ]
     }

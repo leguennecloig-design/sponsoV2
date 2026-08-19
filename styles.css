@@ -1133,37 +1133,6 @@ body.is-locked { overflow: hidden; }
   margin: 16px 0 0;
 }
 
-.config__cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-  gap: 14px;
-  margin-top: 34px;
-}
-
-.config__card {
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  transition: border-color 0.2s ease;
-}
-.config__card.is-filled { border-color: rgba(188, 113, 85, 0.65); }
-
-.config__card-name { font-size: 16px; font-weight: 700; }
-.config__card-meta {
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.config__card-note { font-size: 14px; line-height: 1.5; color: var(--muted); margin: 0; }
-
-.config__card-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
-.config__card-controls input[type="range"] { flex: 1; accent-color: var(--accent); min-width: 0; }
-
 .config__btn {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -1175,7 +1144,7 @@ body.is-locked { overflow: hidden; }
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 .config__btn:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
 .config__btn--remove { border-color: rgba(255, 255, 255, 0.25); color: var(--muted); }
@@ -1248,4 +1217,174 @@ body.is-locked { overflow: hidden; }
 @media (max-width: 760px) {
   .nature { padding: 24px 20px; }
   .nature__text { font-size: 17px; }
+}
+
+/* ---------------------------------------------------------
+   Configurateur — navigation compacte des emplacements
+   --------------------------------------------------------- */
+
+.config__browser { margin-top: 26px; }
+
+.config__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  margin-bottom: 18px;
+}
+
+.config__chip-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.config__chip-label {
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 2px;
+}
+
+.config__chip {
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 1000px;
+  color: var(--muted);
+  padding: 8px 15px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.config__chip:hover { color: #fff; border-color: rgba(255, 255, 255, 0.45); }
+.config__chip.is-active {
+  color: #fff;
+  border-color: var(--accent);
+  background: rgba(188, 113, 85, 0.18);
+}
+.config__chip.is-filled::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 7px;
+  vertical-align: 1px;
+}
+
+.config__detail {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 96px;
+  padding: 20px 24px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.config__detail.is-empty {
+  display: flex;
+  align-items: center;
+  border-left-color: var(--rule);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.config__detail-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+.config__detail-meta {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+}
+.config__detail-name { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.config__detail-note {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+  max-width: 620px;
+}
+.config__detail-btn { margin-left: auto; flex: none; font-size: 15px; padding: 13px 22px; }
+
+/* L'emplacement décrit se signale sur le bateau */
+.config__zone.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(188, 113, 85, 0.3);
+}
+.config__zone.is-active .config__zone-tag { opacity: 1; }
+
+/* --- Logos posés --- */
+
+.config__placed { margin-top: 26px; }
+.config__placed[hidden] { display: none !important; }
+
+.config__placed-title {
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 12px;
+}
+
+.config__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.config__row:last-child { margin-bottom: 0; }
+
+.config__row-thumb {
+  flex: none;
+  width: 46px;
+  height: 34px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.config__row-thumb img { max-width: 80%; max-height: 76%; object-fit: contain; display: block; }
+
+.config__row-name { font-size: 15px; font-weight: 700; min-width: 0; }
+.config__row-name span { font-weight: 400; color: var(--muted); }
+
+.config__row-size {
+  flex: 1;
+  min-width: 80px;
+  max-width: 220px;
+  margin-left: auto;
+  accent-color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .config__chips { gap: 14px 16px; }
+  .config__chip { font-size: 13px; padding: 7px 13px; }
+  .config__detail { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
+  .config__detail-btn { margin-left: 0; width: 100%; text-align: center; }
+  .config__row { flex-wrap: wrap; gap: 10px 12px; }
+  .config__row-name { flex: 1 1 auto; }
+  .config__row-thumb + .config__row-name { min-width: calc(100% - 62px); }
+  .config__row-size { max-width: none; flex: 1 1 55%; margin-left: 0; order: 2; }
+  .config__row .config__btn { order: 3; margin-left: auto; }
 }

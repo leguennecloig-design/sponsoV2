@@ -53,6 +53,7 @@ Section `#emplacements` : une entreprise dépose son logo (glisser-déposer sur 
 
 - **Les deux vues affichées ensemble** — profil (coque) et dessus (pont), pour juger le rendu sur les deux faces d'un coup d'œil.
 - **Onze emplacements prédéfinis** — quatre sur le profil, sept sur le pont. Leurs positions viennent d'un schéma annoté à la main par Loïg : les rectangles rouges ont été relevés au pixel, puis convertis en pourcentages en se calant sur les marquages orange du bateau comme points de repère communs. Chacun porte un nom, une dimension et une note de visibilité, et devient donc une contrepartie identifiable à négocier.
+- **Navigation compacte** — plutôt qu'une carte par emplacement (onze cartes occupaient un écran entier), une rangée de pastilles et un seul encart de détail qui réagit au survol d'un emplacement sur le bateau ou au choix d'une pastille. Les logos posés apparaissent en lignes compactes, une par logo, et rien tant qu'il n'y en a pas.
 - **100 % côté navigateur** — le logo est lu via `URL.createObjectURL()`. Rien n'est téléversé, aucun serveur n'est sollicité. C'est un argument à mettre en avant auprès des marques.
 - **Export PNG en 2×** — bouton « Télécharger l'image » : les deux vues, tous les logos posés, un titre et les coordonnées de Loïg, composés via `<canvas>` en une seule image à joindre à un dossier.
 

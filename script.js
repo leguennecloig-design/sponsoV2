@@ -163,7 +163,9 @@
   if (!boatsEl) return;
 
   var dropEl   = document.getElementById('configDrop');
-  var cardsEl  = document.getElementById('configCards');
+  var chipsEl  = document.getElementById('configChips');
+  var detailEl = document.getElementById('configDetail');
+  var placedEl = document.getElementById('configPlaced');
   var fileIn   = document.getElementById('configFile');
   var resetBtn = document.getElementById('configReset');
   var exportBtn= document.getElementById('configExport');
@@ -249,12 +251,17 @@
     }
   ];
 
-  var logos = {};        // zoneId -> { img, url, name, scale }
+  var logos = {};          // zoneId -> { img, url, name, scale }
   var pendingZone = null;
-  var stages = {};       // viewId -> { zonesEl, imgEl }
+  var activeZone = null;   // emplacement survolé ou sélectionné
+  var stages = {};         // viewId -> { zonesEl, imgEl }
 
-  function eachZone(fn) {
-    VIEWS.forEach(function (v) { v.zones.forEach(function (z) { fn(z, v); }); });
+  function findZone(id) {
+    var found = null;
+    VIEWS.forEach(function (v) {
+      v.zones.forEach(function (z) { if (z.id === id) found = { zone: z, view: v }; });
+    });
+    return found;
   }
 
   /* ------------------------------------------------------
@@ -314,7 +321,7 @@
 
         var tag = document.createElement('span');
         tag.className = 'config__zone-tag';
-        tag.textContent = z.name;
+        tag.textContent = z.name + ' · ' + z.size;
         el.appendChild(tag);
 
         var L = logos[z.id];
@@ -328,72 +335,168 @@
         }
 
         el.addEventListener('click', function () { openPicker(z.id); });
+        el.addEventListener('mouseenter', function () { setActive(z.id); });
+        el.addEventListener('focus', function () { setActive(z.id); });
         host.appendChild(el);
       });
     });
+    highlightActive();
   }
 
-  function renderCards() {
-    cardsEl.innerHTML = '';
+  /* ------------------------------------------------------
+     Navigation compacte : pastilles + encart de détail
+     ------------------------------------------------------ */
+
+  function renderChips() {
+    chipsEl.innerHTML = '';
+
+    VIEWS.forEach(function (view) {
+      var group = document.createElement('div');
+      group.className = 'config__chip-group';
+
+      var label = document.createElement('span');
+      label.className = 'config__chip-label';
+      label.textContent = view.label;
+      group.appendChild(label);
+
+      view.zones.forEach(function (z) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'config__chip';
+        chip.dataset.chip = z.id;
+        chip.textContent = z.name;
+        if (logos[z.id]) chip.classList.add('is-filled');
+        chip.addEventListener('mouseenter', function () { setActive(z.id); });
+        chip.addEventListener('focus', function () { setActive(z.id); });
+        chip.addEventListener('click', function () { setActive(z.id); });
+        group.appendChild(chip);
+      });
+
+      chipsEl.appendChild(group);
+    });
+  }
+
+  function renderDetail() {
+    detailEl.innerHTML = '';
+
+    if (!activeZone) {
+      detailEl.className = 'config__detail is-empty';
+      detailEl.textContent = 'Survolez un emplacement du bateau, ou choisissez-en un ci-dessus, pour voir ce qu’il donne.';
+      return;
+    }
+
+    var f = findZone(activeZone);
+    if (!f) return;
+    var z = f.zone, view = f.view;
+    detailEl.className = 'config__detail';
+
+    var head = document.createElement('div');
+    head.className = 'config__detail-head';
+
+    var meta = document.createElement('span');
+    meta.className = 'config__detail-meta';
+    meta.textContent = view.label + ' · ' + z.size;
+
+    var name = document.createElement('span');
+    name.className = 'config__detail-name';
+    name.textContent = z.name;
+
+    head.appendChild(meta);
+    head.appendChild(name);
+
+    var note = document.createElement('p');
+    note.className = 'config__detail-note';
+    note.textContent = z.note;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn ' + (logos[z.id] ? 'btn--outline' : 'btn--light') + ' config__detail-btn';
+    btn.textContent = logos[z.id] ? 'Changer le logo' : 'Mettre mon logo ici';
+    btn.addEventListener('click', function () { openPicker(z.id); });
+
+    var text = document.createElement('div');
+    text.appendChild(head);
+    text.appendChild(note);
+
+    detailEl.appendChild(text);
+    detailEl.appendChild(btn);
+  }
+
+  function highlightActive() {
+    document.querySelectorAll('.config__zone').forEach(function (c) {
+      c.classList.toggle('is-active', c.dataset.zone === activeZone);
+    });
+    document.querySelectorAll('.config__chip').forEach(function (c) {
+      c.classList.toggle('is-active', c.dataset.chip === activeZone);
+    });
+  }
+
+  function setActive(id) {
+    if (activeZone === id) return;
+    activeZone = id;
+    highlightActive();
+    renderDetail();
+  }
+
+  /* ------------------------------------------------------
+     Logos posés : une ligne par logo, rien quand il n'y en a pas
+     ------------------------------------------------------ */
+
+  function renderPlaced() {
+    placedEl.innerHTML = '';
+    var ids = Object.keys(logos);
+    placedEl.hidden = ids.length === 0;
+    if (!ids.length) return;
+
+    var title = document.createElement('p');
+    title.className = 'config__placed-title';
+    title.textContent = ids.length === 1 ? 'Votre logo sur le bateau' : 'Vos logos sur le bateau';
+    placedEl.appendChild(title);
 
     VIEWS.forEach(function (view) {
       view.zones.forEach(function (z) {
         var L = logos[z.id];
+        if (!L) return;
 
-        var card = document.createElement('div');
-        card.className = 'config__card' + (L ? ' is-filled' : '');
+        var row = document.createElement('div');
+        row.className = 'config__row';
+        row.addEventListener('mouseenter', function () { setActive(z.id); });
 
-        var meta = document.createElement('span');
-        meta.className = 'config__card-meta';
-        meta.textContent = view.label + ' · ' + z.size;
+        var thumb = document.createElement('span');
+        thumb.className = 'config__row-thumb';
+        var ti = document.createElement('img');
+        ti.src = L.url;
+        ti.alt = '';
+        thumb.appendChild(ti);
 
-        var name = document.createElement('span');
-        name.className = 'config__card-name';
-        name.textContent = z.name;
+        var label = document.createElement('span');
+        label.className = 'config__row-name';
+        label.innerHTML = z.name + ' <span>' + view.label.toLowerCase() + '</span>';
 
-        var note = document.createElement('p');
-        note.className = 'config__card-note';
-        note.textContent = z.note;
+        var range = document.createElement('input');
+        range.type = 'range';
+        range.min = '40';
+        range.max = '100';
+        range.value = String(Math.round(L.scale * 100));
+        range.className = 'config__row-size';
+        range.setAttribute('aria-label', 'Taille du logo sur ' + z.name);
+        range.addEventListener('input', function () {
+          L.scale = Number(range.value) / 100;
+          var im = document.querySelector('.config__zone[data-zone="' + z.id + '"] img');
+          if (im) im.style.setProperty('--scale', L.scale);
+        });
 
-        card.appendChild(meta);
-        card.appendChild(name);
-        card.appendChild(note);
+        var rm = document.createElement('button');
+        rm.type = 'button';
+        rm.className = 'config__btn config__btn--remove';
+        rm.textContent = 'Enlever';
+        rm.addEventListener('click', function () { removeLogo(z.id); });
 
-        var controls = document.createElement('div');
-        controls.className = 'config__card-controls';
-
-        if (L) {
-          var range = document.createElement('input');
-          range.type = 'range';
-          range.min = '40';
-          range.max = '100';
-          range.value = String(Math.round(L.scale * 100));
-          range.setAttribute('aria-label', 'Taille du logo sur ' + z.name);
-          range.addEventListener('input', function () {
-            L.scale = Number(range.value) / 100;
-            var im = document.querySelector('.config__zone[data-zone="' + z.id + '"] img');
-            if (im) im.style.setProperty('--scale', L.scale);
-          });
-
-          var rm = document.createElement('button');
-          rm.type = 'button';
-          rm.className = 'config__btn config__btn--remove';
-          rm.textContent = 'Enlever';
-          rm.addEventListener('click', function () { removeLogo(z.id); });
-
-          controls.appendChild(range);
-          controls.appendChild(rm);
-        } else {
-          var add = document.createElement('button');
-          add.type = 'button';
-          add.className = 'config__btn';
-          add.textContent = 'Mettre mon logo ici';
-          add.addEventListener('click', function () { openPicker(z.id); });
-          controls.appendChild(add);
-        }
-
-        card.appendChild(controls);
-        cardsEl.appendChild(card);
+        row.appendChild(thumb);
+        row.appendChild(label);
+        row.appendChild(range);
+        row.appendChild(rm);
+        placedEl.appendChild(row);
       });
     });
   }
@@ -404,15 +507,15 @@
     exportBtn.hidden = n === 0;
     if (countEl) {
       countEl.hidden = n === 0;
-      countEl.textContent = n === 1
-        ? '1 emplacement essayé'
-        : n + ' emplacements essayés';
+      countEl.textContent = n === 1 ? '1 emplacement essayé' : n + ' emplacements essayés';
     }
   }
 
   function render() {
     renderZones();
-    renderCards();
+    renderChips();
+    renderDetail();
+    renderPlaced();
     syncActions();
   }
 

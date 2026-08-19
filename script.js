@@ -381,7 +381,7 @@
 
     if (!activeZone) {
       detailEl.className = 'config__detail is-empty';
-      detailEl.textContent = 'Survolez un emplacement du bateau, ou choisissez-en un ci-dessus, pour voir ce qu’il donne.';
+      detailEl.textContent = 'Survolez un emplacement du bateau, ou choisissez-en un ci-dessus.';
       return;
     }
 
@@ -685,7 +685,7 @@
 
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.font = '19px Arial, sans-serif';
-    ctx.fillText('Loïg Le Guennec — canoë-kayak descente, Équipe de France — @loig.lgc — leguennec.loig@gmail.com',
+    ctx.fillText('Loïg Le Guennec · canoë-kayak descente, Équipe de France · @loig.lgc · leguennec.loig@gmail.com',
                  PAD, height - 26);
 
     try {

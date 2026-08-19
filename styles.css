@@ -577,44 +577,158 @@ body.is-locked { overflow: hidden; }
    Footer / contact
    --------------------------------------------------------- */
 
-.footer { background: var(--bg-deep); }
+.footer {
+  position: relative;
+  background: var(--bg-deep);
+  overflow: hidden;
+}
+/* Halo discret, pour que le bas de page ne soit pas un simple aplat */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: -220px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 120%);
+  height: 520px;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(188, 113, 85, 0.16) 0%, rgba(188, 113, 85, 0) 70%);
+  pointer-events: none;
+}
+
 .footer__inner {
+  position: relative;
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 130px var(--gutter) 60px;
+  padding: 120px var(--gutter) 48px;
 }
-.footer .lead { margin-bottom: 56px; }
 
-.contacts {
+.footer__top {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  border-top: 1px solid var(--rule-strong);
-  margin-bottom: 80px;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  gap: 70px;
+  align-items: start;
+  margin-bottom: 90px;
 }
-.contacts a {
-  display: block;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--rule-strong);
-  font-size: 20px;
-  transition: color 0.2s ease;
+
+.footer__lead {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--muted-strong);
+  margin: 0 0 26px;
+  max-width: 460px;
 }
-.contacts a span {
-  display: block;
+
+.footer__sign {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+}
+.footer__sign-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5fd08a;
+  box-shadow: 0 0 0 4px rgba(95, 208, 138, 0.16);
+}
+
+/* --- Les trois moyens de me joindre --- */
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fcard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.fcard:hover {
+  border-color: rgba(188, 113, 85, 0.75);
+  background: rgba(188, 113, 85, 0.09);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.fcard__icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  color: var(--accent);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.fcard__icon svg { width: 21px; height: 21px; display: block; }
+.fcard:hover .fcard__icon {
+  border-color: rgba(188, 113, 85, 0.7);
+  background: rgba(188, 113, 85, 0.14);
+}
+
+.fcard__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.fcard__label {
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
   color: var(--muted);
 }
-.contacts a:hover { color: var(--accent); }
+.fcard__value {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.fcard__arrow {
+  margin-left: auto;
+  flex: none;
+  font-size: 18px;
+  color: var(--muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.fcard:hover .fcard__arrow { transform: translateX(4px); color: var(--accent); }
 
 .footer__bottom {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  padding-top: 24px;
+  padding-top: 26px;
   border-top: 1px solid var(--rule);
   font-size: 15px;
   color: rgba(255, 255, 255, 0.5);
+}
+.footer__goal {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 760px) {
+  .footer__inner { padding: 80px var(--gutter) 40px; }
+  .footer__top { gap: 44px; margin-bottom: 56px; }
+  .footer__lead { font-size: 17px; }
+  .fcard { padding: 16px 16px; gap: 14px; }
+  .fcard__icon { width: 40px; height: 40px; }
+  .fcard__value { font-size: 16px; }
 }
 
 /* ---------------------------------------------------------

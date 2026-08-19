@@ -151,173 +151,237 @@
 })();
 
 /* =========================================================
-   Configurateur d'emplacements sponsors
-   Tout se passe dans le navigateur : aucun fichier n'est
-   téléversé, aucun serveur n'est sollicité.
+   Configurateur d'emplacements partenaires
+   Les deux vues du bateau sont affichées ensemble. Le logo
+   déposé reste dans le navigateur du visiteur : rien n'est
+   envoyé nulle part.
    ========================================================= */
 (function () {
   'use strict';
 
-  var stage = document.getElementById('configStage');
-  if (!stage) return;
+  var boatsEl = document.getElementById('configBoats');
+  if (!boatsEl) return;
 
-  var boatImg   = document.getElementById('configBoat');
-  var zonesEl   = document.getElementById('configZones');
-  var cardsEl   = document.getElementById('configCards');
-  var fileIn    = document.getElementById('configFile');
-  var resetBtn  = document.getElementById('configReset');
-  var exportBtn = document.getElementById('configExport');
-  var tabs      = Array.prototype.slice.call(document.querySelectorAll('.config__tab'));
+  var dropEl   = document.getElementById('configDrop');
+  var cardsEl  = document.getElementById('configCards');
+  var fileIn   = document.getElementById('configFile');
+  var resetBtn = document.getElementById('configReset');
+  var exportBtn= document.getElementById('configExport');
+  var countEl  = document.getElementById('configCount');
 
-  // Emplacements, exprimés en % de la boîte de l'image du bateau
-  var VIEWS = {
-    profil: {
+  // Coordonnées relevées sur les deux rendus, en % de la boîte de l'image.
+  var VIEWS = [
+    {
+      id: 'profil',
+      label: 'De profil',
+      caption: "Ce que voient les photographes depuis la berge.",
       src: 'assets/bateau-profil.png',
       w: 1413, h: 172,
-      alt: 'Kayak de descente Wakatwo, vue de profil',
+      alt: 'Mon kayak de descente vu de profil',
       zones: [
         {
-          id: 'flanc-central', name: 'Flanc de coque', size: '40 × 10 cm',
-          note: "L'emplacement le plus visible : c'est ce que voient les photographes et les caméras depuis la berge, des deux côtés du bateau.",
-          x: 18, y: 43, w: 31, h: 33
+          id: 'flanc-avant', name: 'Flanc avant', size: '40 × 10 cm',
+          note: "Le plus grand, et celui qu'on voit le mieux. C'est là que tombent les photos de course, des deux côtés du bateau.",
+          x: 16, y: 56, w: 26, h: 24
         },
         {
-          id: 'flanc-arriere', name: 'Flanc arrière', size: '24 × 9 cm',
-          note: "Sur la partie arrière de la coque, bien dégagée de l'eau et nette sur les photos de face.",
-          x: 68, y: 42, w: 23, h: 30
+          id: 'flanc-arriere', name: 'Flanc arrière', size: '26 × 10 cm',
+          note: "Bien au-dessus de la ligne d'eau, donc net même quand ça bouge beaucoup.",
+          x: 63, y: 52, w: 17, h: 24
+        },
+        {
+          id: 'proue', name: 'Proue', size: '15 × 8 cm',
+          note: "Petit, mais c'est la première chose qui passe la ligne d'arrivée.",
+          x: 3, y: 58, w: 10, h: 20
         }
       ]
     },
-    pont: {
+    {
+      id: 'pont',
+      label: 'De dessus',
+      caption: "Ce que filme ma caméra embarquée, et ce que voient les drones.",
       src: 'assets/bateau-pont.png',
       w: 1403, h: 203,
-      alt: 'Kayak de descente Wakatwo, vue de dessus',
+      alt: 'Mon kayak de descente vu de dessus',
       zones: [
         {
           id: 'pont-avant', name: 'Pont avant', size: '30 × 12 cm',
-          note: "Devant le cockpit : l'emplacement filmé par ma caméra embarquée pendant toute la course.",
-          x: 24, y: 40, w: 22, h: 22
+          note: "Droit devant moi pendant toute la course. C'est l'emplacement qu'on voit en continu sur mes vidéos embarquées.",
+          x: 16, y: 33, w: 16, h: 32
         },
         {
-          id: 'pont-arriere', name: 'Pont arrière', size: '26 × 11 cm',
-          note: "Derrière le cockpit, visible sur les vues de drone et les photos prises depuis les passerelles.",
-          x: 72, y: 40, w: 20, h: 22
+          id: 'pont-milieu', name: 'Pont central', size: '20 × 14 cm',
+          note: "Juste devant le cockpit, dans le champ dès que je filme ou qu'on me photographie de face.",
+          x: 34, y: 30, w: 9, h: 38
+        },
+        {
+          id: 'pont-arriere', name: 'Pont arrière', size: '26 × 14 cm',
+          note: "La partie la plus large du bateau. C'est elle qu'on voit du dessus, depuis les passerelles et les ponts.",
+          x: 67, y: 32, w: 12, h: 36
         }
       ]
     }
-  };
+  ];
 
-  var currentView = 'profil';
-  var logos = {};          // zoneId -> { img, url, name, scale }
+  var logos = {};        // zoneId -> { img, url, name, scale }
   var pendingZone = null;
+  var stages = {};       // viewId -> { zonesEl, imgEl }
+
+  function eachZone(fn) {
+    VIEWS.forEach(function (v) { v.zones.forEach(function (z) { fn(z, v); }); });
+  }
 
   /* ------------------------------------------------------
-     Rendu
+     Construction des deux plans de bateau
      ------------------------------------------------------ */
 
+  function buildStages() {
+    VIEWS.forEach(function (view) {
+      var fig = document.createElement('figure');
+      fig.className = 'config__stage';
+
+      var frame = document.createElement('div');
+      frame.className = 'config__frame';
+
+      var img = document.createElement('img');
+      img.className = 'config__boat';
+      img.src = view.src;
+      img.width = view.w;
+      img.height = view.h;
+      img.alt = view.alt;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+
+      var zonesEl = document.createElement('div');
+      zonesEl.className = 'config__zones';
+
+      frame.appendChild(img);
+      frame.appendChild(zonesEl);
+
+      var cap = document.createElement('figcaption');
+      cap.className = 'config__stage-cap';
+      cap.innerHTML = '<strong>' + view.label + '</strong> ' + view.caption;
+
+      fig.appendChild(frame);
+      fig.appendChild(cap);
+      boatsEl.insertBefore(fig, dropEl);
+
+      stages[view.id] = { zonesEl: zonesEl, imgEl: img };
+    });
+  }
+
   function renderZones() {
-    var view = VIEWS[currentView];
-    zonesEl.innerHTML = '';
+    VIEWS.forEach(function (view) {
+      var host = stages[view.id].zonesEl;
+      host.innerHTML = '';
 
-    view.zones.forEach(function (z) {
-      var el = document.createElement('button');
-      el.type = 'button';
-      el.className = 'config__zone';
-      el.dataset.zone = z.id;
-      el.style.left = z.x + '%';
-      el.style.top = z.y + '%';
-      el.style.width = z.w + '%';
-      el.style.height = z.h + '%';
-      el.setAttribute('aria-label', 'Placer un logo sur : ' + z.name);
+      view.zones.forEach(function (z) {
+        var el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'config__zone';
+        el.dataset.zone = z.id;
+        el.style.left = z.x + '%';
+        el.style.top = z.y + '%';
+        el.style.width = z.w + '%';
+        el.style.height = z.h + '%';
+        el.setAttribute('aria-label', 'Mettre mon logo sur : ' + z.name);
 
-      var tag = document.createElement('span');
-      tag.className = 'config__zone-tag';
-      tag.textContent = z.name + ' · ' + z.size;
-      el.appendChild(tag);
+        var tag = document.createElement('span');
+        tag.className = 'config__zone-tag';
+        tag.textContent = z.name;
+        el.appendChild(tag);
 
-      var L = logos[z.id];
-      if (L) {
-        el.classList.add('is-filled');
-        var im = document.createElement('img');
-        im.src = L.url;
-        im.alt = 'Logo ' + L.name;
-        im.style.setProperty('--scale', L.scale);
-        el.appendChild(im);
-      }
+        var L = logos[z.id];
+        if (L) {
+          el.classList.add('is-filled');
+          var im = document.createElement('img');
+          im.src = L.url;
+          im.alt = 'Logo ' + L.name;
+          im.style.setProperty('--scale', L.scale);
+          el.appendChild(im);
+        }
 
-      el.addEventListener('click', function () { openPicker(z.id); });
-      zonesEl.appendChild(el);
+        el.addEventListener('click', function () { openPicker(z.id); });
+        host.appendChild(el);
+      });
     });
   }
 
   function renderCards() {
-    var view = VIEWS[currentView];
     cardsEl.innerHTML = '';
 
-    view.zones.forEach(function (z) {
-      var L = logos[z.id];
+    VIEWS.forEach(function (view) {
+      view.zones.forEach(function (z) {
+        var L = logos[z.id];
 
-      var card = document.createElement('div');
-      card.className = 'config__card' + (L ? ' is-filled' : '');
+        var card = document.createElement('div');
+        card.className = 'config__card' + (L ? ' is-filled' : '');
 
-      var meta = document.createElement('span');
-      meta.className = 'config__card-meta';
-      meta.textContent = z.size;
+        var meta = document.createElement('span');
+        meta.className = 'config__card-meta';
+        meta.textContent = view.label + ' · ' + z.size;
 
-      var name = document.createElement('span');
-      name.className = 'config__card-name';
-      name.textContent = z.name;
+        var name = document.createElement('span');
+        name.className = 'config__card-name';
+        name.textContent = z.name;
 
-      var note = document.createElement('p');
-      note.className = 'config__card-note';
-      note.textContent = z.note;
+        var note = document.createElement('p');
+        note.className = 'config__card-note';
+        note.textContent = z.note;
 
-      card.appendChild(meta);
-      card.appendChild(name);
-      card.appendChild(note);
+        card.appendChild(meta);
+        card.appendChild(name);
+        card.appendChild(note);
 
-      var controls = document.createElement('div');
-      controls.className = 'config__card-controls';
+        var controls = document.createElement('div');
+        controls.className = 'config__card-controls';
 
-      if (L) {
-        var range = document.createElement('input');
-        range.type = 'range';
-        range.min = '40';
-        range.max = '100';
-        range.value = String(Math.round(L.scale * 100));
-        range.setAttribute('aria-label', 'Taille du logo sur ' + z.name);
-        range.addEventListener('input', function () {
-          L.scale = Number(range.value) / 100;
-          var im = zonesEl.querySelector('[data-zone="' + z.id + '"] img');
-          if (im) im.style.setProperty('--scale', L.scale);
-        });
+        if (L) {
+          var range = document.createElement('input');
+          range.type = 'range';
+          range.min = '40';
+          range.max = '100';
+          range.value = String(Math.round(L.scale * 100));
+          range.setAttribute('aria-label', 'Taille du logo sur ' + z.name);
+          range.addEventListener('input', function () {
+            L.scale = Number(range.value) / 100;
+            var im = document.querySelector('.config__zone[data-zone="' + z.id + '"] img');
+            if (im) im.style.setProperty('--scale', L.scale);
+          });
 
-        var rm = document.createElement('button');
-        rm.type = 'button';
-        rm.className = 'config__btn config__btn--remove';
-        rm.textContent = 'Retirer';
-        rm.addEventListener('click', function () { removeLogo(z.id); });
+          var rm = document.createElement('button');
+          rm.type = 'button';
+          rm.className = 'config__btn config__btn--remove';
+          rm.textContent = 'Enlever';
+          rm.addEventListener('click', function () { removeLogo(z.id); });
 
-        controls.appendChild(range);
-        controls.appendChild(rm);
-      } else {
-        var add = document.createElement('button');
-        add.type = 'button';
-        add.className = 'config__btn';
-        add.textContent = 'Placer mon logo';
-        add.addEventListener('click', function () { openPicker(z.id); });
-        controls.appendChild(add);
-      }
+          controls.appendChild(range);
+          controls.appendChild(rm);
+        } else {
+          var add = document.createElement('button');
+          add.type = 'button';
+          add.className = 'config__btn';
+          add.textContent = 'Mettre mon logo ici';
+          add.addEventListener('click', function () { openPicker(z.id); });
+          controls.appendChild(add);
+        }
 
-      card.appendChild(controls);
-      cardsEl.appendChild(card);
+        card.appendChild(controls);
+        cardsEl.appendChild(card);
+      });
     });
   }
 
   function syncActions() {
-    var any = Object.keys(logos).length > 0;
-    resetBtn.hidden = !any;
-    exportBtn.hidden = !any;
+    var n = Object.keys(logos).length;
+    resetBtn.hidden = n === 0;
+    exportBtn.hidden = n === 0;
+    if (countEl) {
+      countEl.hidden = n === 0;
+      countEl.textContent = n === 1
+        ? '1 emplacement essayé'
+        : n + ' emplacements essayés';
+    }
   }
 
   function render() {
@@ -327,7 +391,7 @@
   }
 
   /* ------------------------------------------------------
-     Fichiers logo
+     Chargement du logo
      ------------------------------------------------------ */
 
   function openPicker(zoneId) {
@@ -367,32 +431,7 @@
   });
 
   /* ------------------------------------------------------
-     Bascule entre les deux vues
-     ------------------------------------------------------ */
-
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      var v = tab.dataset.view;
-      if (v === currentView) return;
-      currentView = v;
-
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', String(on));
-      });
-
-      var view = VIEWS[v];
-      boatImg.src = view.src;
-      boatImg.width = view.w;
-      boatImg.height = view.h;
-      boatImg.alt = view.alt;
-      render();
-    });
-  });
-
-  /* ------------------------------------------------------
-     Glisser-déposer (desktop)
+     Glisser-déposer (ordinateur)
      ------------------------------------------------------ */
 
   function zoneAt(x, y) {
@@ -400,9 +439,8 @@
     var hit = el && el.closest ? el.closest('.config__zone') : null;
     if (hit) return hit.dataset.zone;
 
-    // Hors zone : on retient l'emplacement dont le centre est le plus proche
     var best = null, bestDist = Infinity;
-    Array.prototype.forEach.call(zonesEl.children, function (c) {
+    document.querySelectorAll('.config__zone').forEach(function (c) {
       var r = c.getBoundingClientRect();
       var dx = x - (r.left + r.width / 2);
       var dy = y - (r.top + r.height / 2);
@@ -413,88 +451,113 @@
   }
 
   function markTarget(id) {
-    Array.prototype.forEach.call(zonesEl.children, function (c) {
+    document.querySelectorAll('.config__zone').forEach(function (c) {
       c.classList.toggle('is-target', c.dataset.zone === id);
     });
   }
 
   var dragDepth = 0;
 
-  stage.addEventListener('dragenter', function (e) {
+  boatsEl.addEventListener('dragenter', function (e) {
     e.preventDefault();
     dragDepth++;
-    stage.classList.add('is-dragging');
+    boatsEl.classList.add('is-dragging');
   });
 
-  stage.addEventListener('dragover', function (e) {
+  boatsEl.addEventListener('dragover', function (e) {
     e.preventDefault();
     if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
     markTarget(zoneAt(e.clientX, e.clientY));
   });
 
-  stage.addEventListener('dragleave', function () {
+  boatsEl.addEventListener('dragleave', function () {
     dragDepth = Math.max(0, dragDepth - 1);
     if (dragDepth === 0) {
-      stage.classList.remove('is-dragging');
+      boatsEl.classList.remove('is-dragging');
       markTarget(null);
     }
   });
 
-  stage.addEventListener('drop', function (e) {
+  boatsEl.addEventListener('drop', function (e) {
     e.preventDefault();
     dragDepth = 0;
-    stage.classList.remove('is-dragging');
+    boatsEl.classList.remove('is-dragging');
     markTarget(null);
     var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
     if (f) setLogo(zoneAt(e.clientX, e.clientY), f);
   });
 
-  // Empêche le navigateur d'ouvrir le fichier s'il est lâché à côté du bateau
   ['dragover', 'drop'].forEach(function (ev) {
     window.addEventListener(ev, function (e) {
-      if (!stage.contains(e.target)) e.preventDefault();
+      if (!boatsEl.contains(e.target)) e.preventDefault();
     });
   });
 
   /* ------------------------------------------------------
-     Actions
+     Export : les deux vues sur une seule image
      ------------------------------------------------------ */
 
-  resetBtn.addEventListener('click', function () {
-    Object.keys(logos).forEach(function (k) { URL.revokeObjectURL(logos[k].url); });
-    logos = {};
-    render();
-  });
-
-  exportBtn.addEventListener('click', function () {
-    var view = VIEWS[currentView];
-    var canvas = document.createElement('canvas');
-    var SCALE = 2;
-    canvas.width = view.w * SCALE;
-    canvas.height = (view.h + 70) * SCALE;
-
-    var ctx = canvas.getContext("2d");
-    ctx.scale(SCALE, SCALE);
-    ctx.fillStyle = '#0f0f1c';
-    ctx.fillRect(0, 0, view.w, view.h + 70);
-    ctx.drawImage(boatImg, 0, 0, view.w, view.h);
-
+  function drawZones(ctx, view, offsetY) {
     view.zones.forEach(function (z) {
       var L = logos[z.id];
       if (!L || !L.img.naturalWidth) return;
 
-      var zx = z.x / 100 * view.w, zy = z.y / 100 * view.h;
-      var zw = z.w / 100 * view.w, zh = z.h / 100 * view.h;
+      var zx = z.x / 100 * view.w;
+      var zy = z.y / 100 * view.h + offsetY;
+      var zw = z.w / 100 * view.w;
+      var zh = z.h / 100 * view.h;
+
       var boxW = zw * L.scale, boxH = zh * L.scale;
       var ratio = Math.min(boxW / L.img.naturalWidth, boxH / L.img.naturalHeight);
       var dw = L.img.naturalWidth * ratio, dh = L.img.naturalHeight * ratio;
 
       ctx.drawImage(L.img, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
     });
+  }
 
-    ctx.fillStyle = 'rgba(255,255,255,0.55)';
-    ctx.font = 'bold 20px Arial, sans-serif';
-    ctx.fillText("Loïg Le Guennec — simulation d'emplacements partenaires — @loig.lgc", 24, view.h + 44);
+  exportBtn.addEventListener('click', function () {
+    var SCALE = 2;
+    var PAD = 48, HEAD = 100, GAP = 58, FOOT = 62;
+
+    var width = Math.max(VIEWS[0].w, VIEWS[1].w) + PAD * 2;
+    var height = HEAD + VIEWS[0].h + GAP + VIEWS[1].h + FOOT;
+
+    var canvas = document.createElement('canvas');
+    canvas.width = width * SCALE;
+    canvas.height = height * SCALE;
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(SCALE, SCALE);
+
+    ctx.fillStyle = '#0f0f1c';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 30px Arial, sans-serif';
+    ctx.fillText('Votre logo sur mon bateau', PAD, 50);
+
+    var y = HEAD;
+    VIEWS.forEach(function (view, i) {
+      var st = stages[view.id];
+      var x = PAD + (width - PAD * 2 - view.w) / 2;
+
+      ctx.fillStyle = '#bc7155';
+      ctx.font = 'bold 17px Arial, sans-serif';
+      ctx.fillText(view.label.toUpperCase(), PAD, y - 12);
+
+      ctx.save();
+      ctx.translate(x, 0);
+      ctx.drawImage(st.imgEl, 0, y, view.w, view.h);
+      drawZones(ctx, view, y);
+      ctx.restore();
+
+      y += view.h + (i === 0 ? GAP : 0);
+    });
+
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '19px Arial, sans-serif';
+    ctx.fillText('Loïg Le Guennec — canoë-kayak descente, Équipe de France — @loig.lgc — leguennec.loig@gmail.com',
+                 PAD, height - 26);
 
     try {
       canvas.toBlob(function (blob) {
@@ -502,16 +565,23 @@
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'sponsoring-loig-le-guennec-' + currentView + '.png';
+        a.download = 'mon-logo-sur-le-bateau-de-loig.png';
         document.body.appendChild(a);
         a.click();
         a.remove();
         setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
       }, 'image/png');
     } catch (err) {
-      exportBtn.textContent = 'Export impossible avec ce format de logo';
+      exportBtn.textContent = 'Ce format de logo ne peut pas être exporté';
     }
   });
 
+  resetBtn.addEventListener('click', function () {
+    Object.keys(logos).forEach(function (k) { URL.revokeObjectURL(logos[k].url); });
+    logos = {};
+    render();
+  });
+
+  buildStages();
   render();
 })();

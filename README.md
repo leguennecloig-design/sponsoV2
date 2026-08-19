@@ -41,6 +41,7 @@ Un simple double-clic sur `index.html` fonctionne aussi, mais l'embed Instagram 
 | Embarquez avec moi (Instagram) | `#embarque` |
 | Dans le bateau (vidéo) | `#bateau` |
 | Partenariat | `#partenariat` |
+| Contreparties | `#contreparties` |
 | Configurateur d'emplacements | `#emplacements` |
 | Contact | `#contact` |
 
@@ -50,12 +51,12 @@ Tous les CTA « Devenir partenaire » / « Me contacter » ouvrent la popup cont
 
 Section `#emplacements` : une entreprise dépose son logo (glisser-déposer sur desktop, bouton sur mobile) sur une vue 2D du bateau et voit immédiatement le rendu.
 
-- **Deux vues** — profil (coque) et dessus (pont), avec deux emplacements chacune.
-- **Zones prédéfinies** — chaque emplacement porte un nom, une dimension et une note de visibilité ; il devient une contrepartie identifiable à négocier.
+- **Les deux vues affichées ensemble** — profil (coque) et dessus (pont), pour juger le rendu sur les deux faces d'un coup d'œil.
+- **Six emplacements prédéfinis** — trois par vue, calés sur la géométrie réelle des coques. Chacun porte un nom, une dimension et une note de visibilité, et devient donc une contrepartie identifiable à négocier.
 - **100 % côté navigateur** — le logo est lu via `URL.createObjectURL()`. Rien n'est téléversé, aucun serveur n'est sollicité. C'est un argument à mettre en avant auprès des marques.
-- **Export PNG en 2×** — bouton « Télécharger le visuel », composition via `<canvas>`, signature automatique en bas de l'image.
+- **Export PNG en 2×** — bouton « Télécharger l'image » : les deux vues, tous les logos posés, un titre et les coordonnées de Loïg, composés via `<canvas>` en une seule image à joindre à un dossier.
 
-Pour modifier les emplacements (position, taille, texte), tout est dans la constante `VIEWS` en haut du module configurateur de `script.js`. Les coordonnées `x`, `y`, `w`, `h` sont en pourcentage de la boîte de l'image du bateau.
+Pour modifier les emplacements (position, taille, texte), tout est dans la constante `VIEWS` en haut du module configurateur de `script.js`. Les coordonnées `x`, `y`, `w`, `h` sont en pourcentage de la boîte de l'image du bateau — elles ont été relevées sur une grille posée sur les rendus, pas estimées à l'œil.
 
 ## Vidéo « Dans le bateau »
 
